@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO,
 
 def run(playwright: Playwright):
     """Run the main logic using Playwright."""
-    load_dotenv()
+    load_dotenv(override=True)
     website_url = os.getenv("WEBSITE_LINK")
 
     if not website_url:
@@ -30,7 +30,10 @@ def run(playwright: Playwright):
     title = page.title()
     logging.info(f"Page title: {title}")
 
-    create_folder_from_title(title)
+    thread_id = page.locator('.thread').get_attribute('id')
+    logging.info(f"Thread ID : {thread_id}")
+
+    create_folder_from_title(title,thread_id)
 
     browser.close()
 
