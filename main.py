@@ -2,10 +2,10 @@
 
 import os
 import logging
+from urllib.request import urlretrieve
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, Playwright
 from utils import create_folder_from_title, split_up_page_title
-from urllib.request import urlretrieve
 # Configure logging
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
@@ -24,14 +24,15 @@ def run(playwright: Playwright):
     context = browser.new_context()
     page = context.new_page()
 
-    logging.info(f"Navigating to {website_url}")
+    logging.info("Navigating to %s", website_url)
+    
     page.goto(website_url)
 
     title = page.title()
-    logging.info(f"Page title: {title}")
+    logging.info("Page title: %s", title)
 
     thread_id = page.locator('.thread').get_attribute('id')
-    logging.info(f"Thread ID : {thread_id}")
+    logging.info("Thread ID : %s", thread_id)
 
     array_title_response = split_up_page_title(title)
 
