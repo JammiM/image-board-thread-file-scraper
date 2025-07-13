@@ -4,8 +4,8 @@ import os
 import logging
 from dotenv import load_dotenv
 from playwright.sync_api import sync_playwright, Playwright
-from utils import create_folder_from_title
-
+from utils import create_folder_from_title, split_up_page_title
+from urllib.request import urlretrieve
 # Configure logging
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s - %(levelname)s - %(message)s")
@@ -33,7 +33,29 @@ def run(playwright: Playwright):
     thread_id = page.locator('.thread').get_attribute('id')
     logging.info(f"Thread ID : {thread_id}")
 
-    create_folder_from_title(title,thread_id)
+    array_title_response = split_up_page_title(title)
+
+    cleaned_title = array_title_response[1]
+    thread_category = array_title_response[0]
+
+    create_folder_from_title(cleaned_title,thread_id)
+
+
+
+    links = page.locator("xpath=//a[contains(@href,'i.4cdn.org/" + thread_category + "/')]").all()
+
+    for link in links:
+
+        url = link.get_attribute("href")
+
+        file_name = url.rsplit('/', 1)[-1]
+        check_file_exist = os.path.exists(f"{cleaned_title}-{thread_id}" + "/" + file_name)
+
+
+        if check_file_exist == False:
+            urlretrieve("https:" + url,  f"{cleaned_title}-{thread_id}" + "/" + url.rsplit('/', 1)[-1])
+            print(file_name + ' downloaded.')
+
 
     browser.close()
 
