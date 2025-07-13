@@ -40,7 +40,9 @@ def run(playwright: Playwright):
 
     create_folder_from_title(cleaned_title, thread_id)
 
-    regex_path = f"xpath=//a[contains(@href,'i.4cdn.org/{ thread_category }/')]"
+    regex_path = ("xpath=//a[contains(@href,'i.4cdn.org/"
+                  + thread_category
+                  + "/')]")
 
     for link in page.locator(regex_path).all():
 
@@ -48,14 +50,21 @@ def run(playwright: Playwright):
 
         file_name = url.rsplit('/', 1)[-1]
 
-        complete_file_path = os.path.join(os.getenv("OUTPUT_FOLDER"), f"{cleaned_title}-{thread_id}", file_name)
+        complete_file_path = os.path.join(
+            os.getenv("OUTPUT_FOLDER"),
+            f"{cleaned_title}-{thread_id}",
+            file_name)
 
         check_file_exist = os.path.exists(complete_file_path)
 
         if check_file_exist is False:
 
-            generated_file_path_save_file = os.path.join(os.getenv("OUTPUT_FOLDER"), f"{cleaned_title}-{thread_id}", url.rsplit('/', 1)[-1])
-            urlretrieve("https:" + url,  generated_file_path_save_file)
+            file_path_to_save_file = os.path.join(
+                os.getenv("OUTPUT_FOLDER"),
+                f"{cleaned_title}-{thread_id}",
+                url.rsplit('/', 1)[-1])
+
+            urlretrieve("https:" + url,  file_path_to_save_file)
             print(file_name + ' downloaded!')
 
     browser.close()
