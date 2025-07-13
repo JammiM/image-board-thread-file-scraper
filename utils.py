@@ -21,10 +21,8 @@ def create_folder_from_title(title: str, thread_id: str) -> str:
 
     folder_name_with_id = f"{title}-{thread_id}"
 
-    print(folder_name_with_id)
-
-    if not os.path.exists(folder_name_with_id):
-        os.mkdir(folder_name_with_id)
+    if not os.path.exists(os.path.join(os.getenv("OUTPUT_FOLDER"),folder_name_with_id)):
+        os.mkdir(os.path.join(os.getenv("OUTPUT_FOLDER"),folder_name_with_id))
         logging.info(f"Created folder: {folder_name_with_id}")
     else:
         logging.info(f"Folder already exists: {folder_name_with_id}")

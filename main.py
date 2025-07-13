@@ -38,23 +38,29 @@ def run(playwright: Playwright):
     cleaned_title = array_title_response[1]
     thread_category = array_title_response[0]
 
-    create_folder_from_title(cleaned_title,thread_id)
+    create_folder_from_title(cleaned_title, thread_id)
 
-
-
-    links = page.locator("xpath=//a[contains(@href,'i.4cdn.org/" + thread_category + "/')]").all()
+    regex_path = f"xpath=//a[contains(@href,'i.4cdn.org/{ thread_category }/')]"
+    links = page.locator(regex_path).all()
 
     for link in links:
 
         url = link.get_attribute("href")
 
         file_name = url.rsplit('/', 1)[-1]
-        check_file_exist = os.path.exists(f"{cleaned_title}-{thread_id}" + "/" + file_name)
+
+        complete_file_path = os.path.join(os.getenv("OUTPUT_FOLDER"),f"{cleaned_title}-{thread_id}",file_name)
+
+        check_file_exist = os.path.exists(complete_file_path)
+
 
 
         if check_file_exist == False:
-            urlretrieve("https:" + url,  f"{cleaned_title}-{thread_id}" + "/" + url.rsplit('/', 1)[-1])
-            print(file_name + ' downloaded.')
+
+            generated_file_path_save_file = os.path.join(os.getenv("OUTPUT_FOLDER"),f"{cleaned_title}-{thread_id}",url.rsplit('/', 1)[-1])
+
+            urlretrieve("https:" + url,  generated_file_path_save_file)
+            print(file_name + ' downloaded!')
 
 
     browser.close()
