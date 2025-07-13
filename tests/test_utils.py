@@ -10,10 +10,11 @@ def test_create_folder_normal_title():
     with tempfile.TemporaryDirectory() as temp_dir:
         os.chdir(temp_dir)
         title = "/3/ - Pixel - 3DCG - chan"
-        folder = create_folder_from_title(title)
+        thread_id = 't22227354'
+        folder = create_folder_from_title(title, thread_id)
 
         assert os.path.exists(folder)
-        assert folder == "Pixel"  # Based on splitting logic
+        assert folder == "Pixel-t22227354"  # Based on splitting logic
 
 
 def test_create_folder_with_slash():
@@ -21,7 +22,8 @@ def test_create_folder_with_slash():
     with tempfile.TemporaryDirectory() as temp_dir:
         os.chdir(temp_dir)
         title = "/3/ - Pixel/Vertex - 3DCG - chan"
-        folder = create_folder_from_title(title)
+        thread_id = 't22227354'
+        folder = create_folder_from_title(title, thread_id)
 
         assert os.path.exists(folder)
         assert "/" not in folder
@@ -32,7 +34,9 @@ def test_create_folder_unexpected_title_format():
     with tempfile.TemporaryDirectory() as temp_dir:
         os.chdir(temp_dir)
         title = "JustAPlainTitle"
-        folder = create_folder_from_title(title)
+        thread_id = 't22227354'
+
+        folder = create_folder_from_title(title, thread_id)
 
         assert os.path.exists(folder)
         assert folder == "JustAPlainTitle"
@@ -45,10 +49,12 @@ def does_the_folder_already_exists():
         os.mkdir("Pixel")
 
         title = "/3/ - Pixel - 3DCG - chan"
-        folder = create_folder_from_title(title)
+        thread_id = 't22227354'
 
-        assert os.path.exists("Pixel")
-        assert folder == "Pixel"
+        folder = create_folder_from_title(title, thread_id)
+
+        assert os.path.exists("Pixel-t22227354")
+        assert folder == "Pixel-t22227354"
 
 
 # def does_atleast_one_element_exist():
