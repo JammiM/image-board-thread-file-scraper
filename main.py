@@ -25,7 +25,7 @@ def run(playwright: Playwright):
     page = context.new_page()
 
     logging.info("Navigating to %s", website_url)
-    
+
     page.goto(website_url)
 
     title = page.title()
