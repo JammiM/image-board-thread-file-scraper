@@ -13,6 +13,7 @@ logging.basicConfig(level=logging.INFO,
 
 def run(playwright: Playwright):
     """Run the main logic using Playwright."""
+    # pylint: disable-msg=too-many-locals
     load_dotenv(override=True)
     website_url = os.getenv("WEBSITE_LINK")
 
